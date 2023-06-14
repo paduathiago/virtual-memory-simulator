@@ -46,9 +46,10 @@ void* dequeue(struct Queue* queue) {
         if (queue->front == queue->rear) {
             queue->front = -1;
             queue->rear = -1;
-        } else {
+        } 
+        else 
             queue->front = (queue->front + 1) % queue->maxSize;
-        }
+        
         return item;
     }
 }

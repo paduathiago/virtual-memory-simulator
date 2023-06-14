@@ -2,16 +2,6 @@
 
 #include "queue.h"
 
-FILE * openFile(char *file) {
-    FILE *file = fopen(file, "r");
-    if (file == NULL) 
-    {
-        printf("Invalid File!.\n");
-        return 1;
-    }
-    return file;
-}
-
 int sValue(int pageSize)
 {
     int tmp = pageSize;
@@ -32,6 +22,12 @@ int main(int argc, char *argv[])
     unsigned memorySize = atoi(argv[4]);
 
     unsigned s = sValue(pageSize);
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) 
+    {
+        printf("Invalid File!.\n");
+        return 1;
+    }
 
     if (argc != 5)
     {
@@ -45,7 +41,6 @@ int main(int argc, char *argv[])
     }
     else if (algorithm == 'fifo')
     {
-        FILE * file = openFile(fileName);
         unsigned addr, page;
         char mode;
 
@@ -69,6 +64,7 @@ int main(int argc, char *argv[])
                 enqueue(queue, page);
             }  
         }
+        destroyQueue(queue);
         fclose(file);
     }
     else if (algorithm == 'lru')
