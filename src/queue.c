@@ -17,7 +17,7 @@ int isQueueFull(struct Queue* queue) {
     return (queue->rear + 1) % queue->maxSize == queue->front;
 }
 
-int isInQueue(struct Queue* queue, void* item) {
+int isInQueue(struct Queue* queue, unsigned item) {
     int i;
     for (i = queue->front; i != queue->rear; i = (i + 1) % queue->maxSize)
     {
@@ -27,7 +27,7 @@ int isInQueue(struct Queue* queue, void* item) {
     return 0;
 }
 
-void enqueue(struct Queue* queue, void* item) {
+void enqueue(struct Queue* queue, unsigned item) {
     if (isQueueEmpty(queue))
         queue->front = 0;
 

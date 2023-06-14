@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 struct Node {
-    void* data;
+    unsigned data;
     struct Node* prev;
     struct Node* next;
 };
@@ -20,10 +20,10 @@ struct DoublyLinkedStack {
 struct DoublyLinkedStack* createDLStack(int maxSize);
 int isDLStackEmpty(struct DoublyLinkedStack* stack);
 int isDLStackFull(struct DoublyLinkedStack* stack);
-int isinDLStack(struct DoublyLinkedStack* stack, void* data);
-void push(struct DoublyLinkedStack* stack, void* data);
-void* popBottom(struct DoublyLinkedStack* stack);
-void* popFromData(struct DoublyLinkedStack* stack, void* data);
+int isinDLStack(struct DoublyLinkedStack* stack, unsigned data);
+void push(struct DoublyLinkedStack* stack, unsigned data);
+unsigned popBottom(struct DoublyLinkedStack* stack);
+unsigned popFromData(struct DoublyLinkedStack* stack, unsigned data);
 void destroyDLStack(struct DoublyLinkedStack* stack);
 
 #endif /* DOUBLY_LINKED_STACK_H */

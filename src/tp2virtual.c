@@ -89,7 +89,14 @@ int main(int argc, char *argv[])
                 }
                 
                 // Chamar método para adicionar a página.
-                pushDLStack(stack, page);
+                push(stack, page);
+            }
+            else
+            {
+                // Se estiver, verificar se a página está no topo da pilha. (feito na própria função)
+                // Se não estiver, desempilhar a página e empilhar no topo.
+                
+
             }
         }
         destroyDLStack(stack);

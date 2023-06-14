@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 struct Queue {
-    void** items;
+    unsigned** items;
     int front;
     int rear;
     int maxSize;
@@ -14,8 +14,8 @@ struct Queue {
 struct Queue* createQueue(int maxSize);
 int isQueueEmpty(struct Queue* queue);
 int isQueueFull(struct Queue* queue);
-int isInQueue(struct Queue* queue, void* item);
-void enqueue(struct Queue* queue, void* item);
+int isInQueue(struct Queue* queue, unsigned item);
+void enqueue(struct Queue* queue, unsigned item);
 void* dequeue(struct Queue* queue);
 void destroyQueue(struct Queue* queue);
 
