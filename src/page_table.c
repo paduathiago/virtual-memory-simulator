@@ -20,17 +20,17 @@ int MemoryPosition(PageTable* table, int pageNumber){
     return -1;
 }
 
-void insertPageTableEntry(PageTable* table, int pageNumber) {
+void insertPage(PageTable* table, int pageNumber) {
     int memPosition = MemoryPosition(table, pageNumber);
 
     // if page is already in memory, increment reference bit
-    if(memPosition != -1)  
-        table->entries[memPosition].referenceBit = 1;
+    if(memPosition != -1)
+        table->entries[memPosition].referenceBit = 1;   
     else
     {
         PageTableEntry entry;
         entry.referenceBit = 0;
         table->entries[table->size] = entry;
+        table->size++;
     }
-    table->size++;
 }

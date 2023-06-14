@@ -1,8 +1,9 @@
 #include <stdio.h>
 
+#include "circular_queue.h"
 #include "doubly_linked_stack.h"
-#include "queue.h"
 #include "page_table.h"
+#include "queue.h"
 
 int sValue(int pageSize)
 {
@@ -25,6 +26,8 @@ int main(int argc, char *argv[])
 
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
+    PageTable* pgTable = createPageTable(memorySize/pageSize);
+
     if (file == NULL) 
     {
         printf("Invalid File!.\n");
@@ -42,17 +45,29 @@ int main(int argc, char *argv[])
         unsigned addr, page;
         char mode;
 
-        PageTable* pgTable = createPageTable(memorySize/pageSize);
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             
+            CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
             if(!isPTFull)
-                // We are free to insert pages as long as the page table is not full
-                insertPageTableEntry(pgTable, page);
+            {
+                // We are free to insert as long as the page table is not full
+                insertPage(pgTable, page);
+                enqueue(circularQ, page);
+            }
             else
             {
-
+                // If the page table is full, we need to check if the page is already in memory
+                int memPosition = MemoryPosition(pgTable, page);
+                if (memPosition != -1)
+                    // If it is, we need to increment the reference bit
+                    pgTable->entries[memPosition].referenceBit = 1;
+                else
+                {
+                    // otherwise, we need to replace the first page in memory whose reference bit is 0
+                    
+                }
             }
 
             // Verificar se a página já está na memória e incrementar o bit de referência

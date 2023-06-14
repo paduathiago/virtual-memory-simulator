@@ -10,7 +10,7 @@ typedef struct {
 } PageTable;
 
 PageTable* createPageTable(int capacity);
-void insertPageTableEntry(PageTable* table, int address);
+void insertPage(PageTable* table, int pageNumber);
 int isPTFull(PageTable* table);
 int MemoryPosition(PageTable* table, int pageNumber);
 
