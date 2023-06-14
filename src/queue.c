@@ -1,42 +1,46 @@
 #include "queue.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 struct Queue* createQueue(int maxSize) {
     struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
-    queue->items = (int*)malloc(sizeof(int) * maxSize);
+    queue->items = (void**)malloc(sizeof(void*) * maxSize);
     queue->front = -1;
     queue->rear = -1;
     queue->maxSize = maxSize;
     return queue;
 }
 
-int isEmpty(struct Queue* queue) {
+int isQueueEmpty(struct Queue* queue) {
     return queue->front == -1;
 }
 
-int isFull(struct Queue* queue) {
+int isQueueFull(struct Queue* queue) {
     return (queue->rear + 1) % queue->maxSize == queue->front;
 }
 
-void addItem(struct Queue* queue, int item) {
-    if (isFull(queue)) {
-        printf("Fila cheia, impossível adicionar elemento.\n");
-    } else {
-        if (isEmpty(queue)) {
-            queue->front = 0;
-        }
-        queue->rear = (queue->rear + 1) % queue->maxSize;
-        queue->items[queue->rear] = item;
-        printf("Elemento %d adicionado à fila.\n", item);
+int isInQueue(struct Queue* queue, void* item) {
+    int i;
+    for (i = queue->front; i != queue->rear; i = (i + 1) % queue->maxSize)
+    {
+        if (queue->items[i] == item)
+            return 1;
     }
+    return 0;
 }
 
-int removeItem(struct Queue* queue) {
-    int item;
-    if (isEmpty(queue)) {
+void enqueue(struct Queue* queue, void* item) {
+    if (isQueueEmpty(queue))
+        queue->front = 0;
+
+    queue->rear = (queue->rear + 1) % queue->maxSize;
+    queue->items[queue->rear] = item;
+    printf("Elemento adicionado à fila.\n");
+}
+
+void* dequeue(struct Queue* queue) {
+    void* item;
+    if (isQueueEmpty(queue)) {
         printf("Fila vazia, impossível remover elemento.\n");
-        return -1;
+        return NULL;
     } else {
         item = queue->items[queue->front];
         if (queue->front == queue->rear) {

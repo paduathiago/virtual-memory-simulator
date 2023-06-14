@@ -49,16 +49,25 @@ int main(int argc, char *argv[])
         unsigned addr, page;
         char mode;
 
-        // The queue size is the memory size divided by the page size. This represents the number of pages in memory
+        // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
         struct Queue * queue = createQueue(memorySize/pageSize);  
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            // Chamar método para enfileirar a página.
-            // Verificar se a página já está na memória.
-            // Se não estiver, verificar se a memória está cheia.
-            // Se estiver, desenfileirar a página mais antiga.
-            // Enfileirar a página atual.
+            // Verificar se a página já está na memória
+            if(!isInQueue(queue, page))
+            {
+                // Se não estiver, verificar se a memória está cheia.
+                if (isQueueFull(queue))
+                {
+                    // Se estiver, desenfileirar a página mais antiga.
+                    dequeue(queue);
+                    // Essa página se torna suja?
+                }
+                
+                // Chamar método para enfileirar a página.
+                enqueue(queue, page);
+            }  
         }
         fclose(file);
     }

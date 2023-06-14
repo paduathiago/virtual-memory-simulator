@@ -1,18 +1,22 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 struct Queue {
-    int* items;
+    void** items;
     int front;
     int rear;
     int maxSize;
 };
 
 struct Queue* createQueue(int maxSize);
-int isEmpty(struct Queue* queue);
-int isFull(struct Queue* queue);
-void addItem(struct Queue* queue, int item);
-int removeItem(struct Queue* queue);
+int isQueueEmpty(struct Queue* queue);
+int isQueueFull(struct Queue* queue);
+int isInQueue(struct Queue* queue, void* item);
+void enqueue(struct Queue* queue, void* item);
+void* dequeue(struct Queue* queue);
 void destroyQueue(struct Queue* queue);
 
 #endif /* QUEUE_H */
