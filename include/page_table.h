@@ -10,14 +10,13 @@ typedef struct {
 } PageTable;
 
 PageTable* createPageTable(int capacity);
+void insertPageTableEntry(PageTable* table, int address);
+int isPTFull(PageTable* table);
+int MemoryPosition(PageTable* table, int pageNumber);
 
 typedef struct {
-    int page_number;
-    int frame_number;
+    int pageNumber;
     int referenceBit;
 } PageTableEntry;
-
-
-
 
 #endif

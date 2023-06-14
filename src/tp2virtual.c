@@ -2,6 +2,7 @@
 
 #include "doubly_linked_stack.h"
 #include "queue.h"
+#include "page_table.h"
 
 int sValue(int pageSize)
 {
@@ -38,7 +39,26 @@ int main(int argc, char *argv[])
 
     if (algorithm == '2a')
     {
+        unsigned addr, page;
+        char mode;
 
+        PageTable* pgTable = createPageTable(memorySize/pageSize);
+        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        {
+            page = addr >> s;
+            
+            if(!isPTFull)
+                // We are free to insert pages as long as the page table is not full
+                insertPageTableEntry(pgTable, page);
+            else
+            {
+
+            }
+
+            // Verificar se a página já está na memória e incrementar o bit de referência
+            
+        }
+        
     }
     else if (algorithm == 'fifo')
     {
@@ -90,7 +110,7 @@ int main(int argc, char *argv[])
                 push(stack, page);
             }
             else if(pageToBeRenewed == -1)
-                return;  // Se estiver na memoria e no topo da pilha não faz nada
+                continue;  // Se estiver na memoria e no topo da pilha não faz nada
             else
                 // Se não estiver(no topo), empilhar no topo, ja que a pagina foi removida previamente.
                 push(stack, pageToBeRenewed);             
