@@ -84,22 +84,22 @@ int main(int argc, char *argv[])
                 // Se não estiver, verificar se a memória está cheia.
                 if (isDLStackFull(stack))
                 {
-                    // Se estiver, desenfileirar a página no fundo da pilha.
-
-                    // Essa página se torzna suja?
+                    // Se estiver, remove a página no fundo da pilha.
+                    popBottom(stack);   // Essa página se torna suja?
+                    push(stack, page);
                 }
                 
                 // Chamar método para adicionar a página.
                 push(stack, page);
             }
             else if(pageToBeRenewed == -1)
-                return;
+                return;  // Se estiver na memoria e no topo da pilha
             else
-                push(stack, pageToBeRenewed);
-                // Se estiver, verificar se a página está no topo da pilha. (feito na própria função)
                 // Se não estiver(no topo), desempilhar a página e empilhar no topo.
+                push(stack, pageToBeRenewed);             
         }
         destroyDLStack(stack);
+        fclose(file);
     }
     else if (algorithm == 'random')
     {
