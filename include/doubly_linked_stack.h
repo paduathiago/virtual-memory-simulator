@@ -23,7 +23,7 @@ int isDLStackFull(struct DoublyLinkedStack* stack);
 int isinDLStack(struct DoublyLinkedStack* stack, unsigned data);
 void push(struct DoublyLinkedStack* stack, unsigned data);
 unsigned popBottom(struct DoublyLinkedStack* stack);
-unsigned popFromData(struct DoublyLinkedStack* stack, unsigned data);
+int popFromData(struct DoublyLinkedStack* stack, unsigned data);
 void destroyDLStack(struct DoublyLinkedStack* stack);
 
 #endif /* DOUBLY_LINKED_STACK_H */

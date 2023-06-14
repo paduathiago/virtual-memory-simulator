@@ -65,11 +65,11 @@ unsigned popBottom(struct DoublyLinkedStack* stack)
     return bottomData;
 }
 
-unsigned popFromData(struct DoublyLinkedStack* stack, unsigned data) 
+int popFromData(struct DoublyLinkedStack* stack, unsigned data) 
 {
     struct Node* currentNode = stack->top;
     if (data == stack->top->data)
-        return;  // Return since no action is needed (node is already on top)
+        return -1;  // Return since no action is needed (node is already on top)
     
     while (currentNode != NULL) 
     {
@@ -94,7 +94,7 @@ unsigned popFromData(struct DoublyLinkedStack* stack, unsigned data)
         }
         currentNode = currentNode->prev;
     }
-    return NULL;
+    return -2;  // Data not found
 }
 
 /*
