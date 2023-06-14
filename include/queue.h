@@ -4,19 +4,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Queue {
-    unsigned** items;
-    int front;
-    int rear;
-    int maxSize;
+#define queue_t struct queue
+#define node_t struct node
+
+
+struct node{
+    node_t* prev;
+    node_t* nxt;
+    long long value;
 };
 
-struct Queue* createQueue(int maxSize);
-int isQueueEmpty(struct Queue* queue);
-int isQueueFull(struct Queue* queue);
-int isInQueue(struct Queue* queue, unsigned item);
-void enqueue(struct Queue* queue, unsigned item);
-void* dequeue(struct Queue* queue);
-void destroyQueue(struct Queue* queue);
+struct queue
+{
+    node_t* head;
+    node_t* tail;
+};
+
+
+node_t* create_node();
+
+queue_t* create_queue();
+
+void pop_back(queue_t* q);
+
+void pop_front(queue_t* q);
+ 
+void push_back(queue_t* q, long long val);
+
+void push_front(queue_t* q, long long val);
+
+node_t* find_node(queue_t* q, long long val);
+
+void erase(queue_t* q, long long val);
+
+void print_queue(queue_t* q);
 
 #endif /* QUEUE_H */
