@@ -65,6 +65,78 @@ void* popBottom(struct DoublyLinkedStack* stack)
     return bottomData;
 }
 
+void* popFromData(struct DoublyLinkedStack* stack, void* data) 
+{
+    struct Node* currentNode = stack->top;
+    if (currentNode->data == stack->top->data)
+            return;  // Return since no action is needed (node is already on top)
+    while (currentNode != NULL) 
+    {
+        
+        if (currentNode->data == data) {
+            void* currentData = currentNode->data;
+            struct Node* prevNode = currentNode->prev;
+            struct Node* nextNode = currentNode->next;
+
+            if (prevNode != NULL) 
+                prevNode->next = nextNode;
+            else 
+                stack->top = nextNode;
+
+            if (nextNode != NULL) 
+                nextNode->prev = prevNode;
+            else 
+                stack->bottom = prevNode;
+
+            free(currentNode);
+            stack->size--;
+            return currentData;
+        }
+        currentNode = currentNode->prev;
+    }
+    return NULL;
+}
+
+/*
+while (currentNode != NULL) 
+    {
+        if (currentNode->data == data) {
+            void* currentData = currentNode->data;
+            struct Node* prevNode = currentNode->prev;
+            struct Node* nextNode = currentNode->next;
+
+            if (prevNode != NULL)
+            {
+                prevNode->next = nextNode;
+                nextNode->prev = prevNode;
+            } 
+                
+            else
+            {
+                nextNode->prev = NULL;
+                stack->bottom = nextNode;
+            }
+
+            if (nextNode != NULL) 
+            {
+                nextNode->prev = prevNode; // Checar caso para size = 2
+                prevNode->next = nextNode;
+            }
+            else 
+            {
+                prevNode->next = NULL;
+                stack->top = prevNode;
+            }    
+                
+
+            free(currentNode);
+            stack->size--;
+            return currentData;
+        }
+        currentNode = currentNode->prev;
+    }
+*/
+
 void destroyDLStack(struct DoublyLinkedStack* stack) {
     while (!isDoublyLinkedStackEmpty(stack)) 
         pop(stack);
