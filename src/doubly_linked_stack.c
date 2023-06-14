@@ -97,46 +97,6 @@ int popFromData(struct DoublyLinkedStack* stack, unsigned data)
     return -2;  // Data not found
 }
 
-/*
-while (currentNode != NULL) 
-    {
-        if (currentNode->data == data) {
-            unsigned currentData = currentNode->data;
-            struct Node* prevNode = currentNode->prev;
-            struct Node* nextNode = currentNode->next;
-
-            if (prevNode != NULL)
-            {
-                prevNode->next = nextNode;
-                nextNode->prev = prevNode;
-            } 
-                
-            else
-            {
-                nextNode->prev = NULL;
-                stack->bottom = nextNode;
-            }
-
-            if (nextNode != NULL) 
-            {
-                nextNode->prev = prevNode; // Checar caso para size = 2
-                prevNode->next = nextNode;
-            }
-            else 
-            {
-                prevNode->next = NULL;
-                stack->top = prevNode;
-            }    
-                
-
-            free(currentNode);
-            stack->size--;
-            return currentData;
-        }
-        currentNode = currentNode->prev;
-    }
-*/
-
 void destroyDLStack(struct DoublyLinkedStack* stack) {
     while (!isDLStackEmpty(stack)) 
         pop(stack);
