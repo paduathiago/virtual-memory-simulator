@@ -1,6 +1,5 @@
 TARGET = tp2virtual
 
-# Compilador C
 CC = gcc
 
 # Flags de compilação
