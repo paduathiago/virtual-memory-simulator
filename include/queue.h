@@ -11,8 +11,8 @@ struct Queue {
 struct Queue* createQueue(int maxSize);
 int isEmpty(struct Queue* queue);
 int isFull(struct Queue* queue);
-void enqueue(struct Queue* queue, int item);
-int dequeue(struct Queue* queue);
+void addItem(struct Queue* queue, int item);
+int removeItem(struct Queue* queue);
 void destroyQueue(struct Queue* queue);
 
 #endif /* QUEUE_H */

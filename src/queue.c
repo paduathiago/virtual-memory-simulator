@@ -19,7 +19,7 @@ int isFull(struct Queue* queue) {
     return (queue->rear + 1) % queue->maxSize == queue->front;
 }
 
-void enqueue(struct Queue* queue, int item) {
+void addItem(struct Queue* queue, int item) {
     if (isFull(queue)) {
         printf("Fila cheia, impossível adicionar elemento.\n");
     } else {
@@ -32,7 +32,7 @@ void enqueue(struct Queue* queue, int item) {
     }
 }
 
-int dequeue(struct Queue* queue) {
+int removeItem(struct Queue* queue) {
     int item;
     if (isEmpty(queue)) {
         printf("Fila vazia, impossível remover elemento.\n");
