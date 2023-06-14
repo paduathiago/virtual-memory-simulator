@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "doubly_linked_stack.h"
 #include "queue.h"
 
 int sValue(int pageSize)
@@ -69,7 +70,29 @@ int main(int argc, char *argv[])
     }
     else if (algorithm == 'lru')
     {
+        unsigned addr, page;
+        char mode;
 
+        struct DoublyLinkedStack * stack = createDLStack(memorySize/pageSize);  
+        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        {
+            page = addr >> s;
+            // Verificar se a página já está na memória
+            if(!isInDLStack(stack, page))
+            {
+                // Se não estiver, verificar se a memória está cheia.
+                if (isDLStackFull(stack))
+                {
+                    // Se estiver, desenfileirar a página no fundo da pilha.
+
+                    // Essa página se torna suja?
+                }
+                
+                // Chamar método para adicionar a página.
+                pushDLStack(stack, page);
+            }
+        }
+        destroyDLStack(stack);
     }
     else if (algorithm == 'random')
     {
