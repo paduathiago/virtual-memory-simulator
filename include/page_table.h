@@ -2,6 +2,15 @@
 #define PAGE_TABLE_H
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int pageNumber;
+    int referenceBit;
+} PageTableEntry;
+
+PageTableEntry* createPageTableEntry(int pageNumber);
 
 typedef struct {
     PageTableEntry* entries;
@@ -15,12 +24,5 @@ PageTableEntry* replacePage(PageTable* table, int pageNumber);
 PageTableEntry* replaceRandom(PageTable* table, int pageNumber);
 int isPTFull(PageTable* table);
 int MemoryPosition(PageTable* table, int pageNumber);
-
-typedef struct {
-    int pageNumber;
-    int referenceBit;
-} PageTableEntry;
-
-PageTableEntry* createPageTableEntry(int pageNumber);
 
 #endif

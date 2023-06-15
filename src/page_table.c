@@ -52,7 +52,7 @@ PageTableEntry * replacePage(PageTable* table, int pageNumber)
     {
         if(table->entries[i].pageNumber == pageNumber)
         {
-            replaced = table->entries[i];
+            replaced = &table->entries[i];
             table->entries[i].pageNumber = pageNumber;
             table->entries[i].referenceBit = 0;
             return replaced;
@@ -63,7 +63,7 @@ PageTableEntry * replacePage(PageTable* table, int pageNumber)
 PageTableEntry * replaceRandom(PageTable* table, int pageNumber) 
 {
     int random = rand() % table->size;
-    PageTableEntry *replaced = table->entries[random];
+    PageTableEntry *replaced = &table->entries[random];
     table->entries[random].pageNumber = pageNumber;
 
     return replaced;
