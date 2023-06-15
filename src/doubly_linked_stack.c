@@ -1,6 +1,6 @@
 #include "doubly_linked_stack.h"
 
-struct DoublyLinkedStack* createDoublyLinkedStack(int maxSize) {
+struct DoublyLinkedStack* createDLStack(int maxSize) {
     struct DoublyLinkedStack* stack = (struct DoublyLinkedStack*)malloc(sizeof(struct DoublyLinkedStack));
     stack->top = NULL;
     stack->bottom = NULL;
