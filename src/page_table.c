@@ -43,21 +43,20 @@ void insertPage(PageTable* table, int pageNumber)
     }
 }
 
-PageTableEntry * replacePage(PageTable* table, int pageNumber) 
+PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage) 
 {
-    int memPosition = MemoryPosition(table, pageNumber);
+    int memPosition = MemoryPosition(table, removedPage);
     PageTableEntry *replaced;
 
-    for(int i = 0; i < table->size; i++)
+    if (memPosition != -1)
     {
-        if(table->entries[i].pageNumber == pageNumber)
-        {
-            replaced = &table->entries[i];
-            table->entries[i].pageNumber = pageNumber;
-            table->entries[i].referenceBit = 0;
-            return replaced;
-        }
+        replaced = &table->entries[memPosition];
+        table->entries[memPosition].pageNumber = newPage;
+        table->entries[memPosition].referenceBit = 0;
+        return replaced;
     }
+    else 
+        printf("Error! Page not found in memory\n");
 }
 
 PageTableEntry * replaceRandom(PageTable* table, int pageNumber) 
