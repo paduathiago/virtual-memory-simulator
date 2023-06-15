@@ -24,13 +24,15 @@ int main(int argc, char *argv[])
     char * algorithm = argv[1];
     char * fileName = argv[2];
     unsigned pageSize = atoi(argv[3]);
-    unsigned memorySize = atoi(argv[4]);
+    unsigned memorySize = atoi(argv[4]); 
+    
+    unsigned addr, page, dirtyPages = 0;
+    char mode;
 
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
     PageTable* pgTable = createPageTable(memorySize/pageSize);
-    unsigned addr, page;
-    char mode;
+   
 
     if (file == NULL) 
     {
@@ -70,6 +72,9 @@ int main(int argc, char *argv[])
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
                     int pageToBeReplaced = itemReplacement(circularQ, page, mode);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
+                    
+                    if (replaced->dirtyBit == 1)
+                        dirtyPages++;
                 }
             }
         }
@@ -91,7 +96,9 @@ int main(int argc, char *argv[])
                     node_t * pageToBeReplaced = popFront(queue);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page);
                     pushBack(queue, page);
-                    // Essa página se torna suja?
+                    
+                    if (replaced->dirtyBit == 1)
+                        dirtyPages++;
                 }
                 else
                 {
@@ -121,8 +128,10 @@ int main(int argc, char *argv[])
                     // If it is, we pop the bottom of the stack and replace it with the new page
                     int pageToBeReplaced = popBottom(stack);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
-                    // Essa página se torna suja?
                     push(stack, page);
+
+                    if (replaced->dirtyBit == 1)
+                        dirtyPages++;
                 }
                 else
                 {
@@ -149,7 +158,12 @@ int main(int argc, char *argv[])
             if(!isPTFull(pgTable))
                 insertPage(pgTable, page, mode);
             else
-                replaceRandom(pgTable, page);
+            {
+                PageTableEntry * replaced = replaceRandom(pgTable, page);
+                if (replaced->dirtyBit == 1)
+                    dirtyPages++;
+            }
+                
         }
     }
     else
@@ -162,8 +176,8 @@ int main(int argc, char *argv[])
     printf("Memory Size: %d\n", memorySize);
     printf("Page Size: %d\n", pageSize);
     printf("Replacement Algorithm: %s\n", algorithm);
+    printf("Written pages: %d\n", dirtyPages);
     //printf("Page Faults: %d\n", pgTable->pageFaults);
-    //printf("Page Hits: %d\n", pgTable->pageHits);
 
     return 0;
 }
