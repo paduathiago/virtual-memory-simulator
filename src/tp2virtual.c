@@ -27,6 +27,8 @@ int main(int argc, char *argv[])
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
     PageTable* pgTable = createPageTable(memorySize/pageSize);
+    unsigned addr, page;
+    char mode;
 
     if (file == NULL) 
     {
@@ -42,9 +44,6 @@ int main(int argc, char *argv[])
 
     if (algorithm == '2a')
     {
-        unsigned addr, page;
-        char mode;
-
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
@@ -68,44 +67,43 @@ int main(int argc, char *argv[])
                     // otherwise, we need to replace the first page in memory whose reference bit is 0
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
                     int pageToBeReplaced = itemReplacement(circularQ, pgTable);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
                 }
             }
         }
+        fclose(file);
     }
     else if (algorithm == 'fifo')
     {
-        unsigned addr, page;
-        char mode;
-
         // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
         struct Queue * queue = createQueue(pgTable->capacity);  
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            // Verificar se a página já está na memória
             if(!isInQueue(queue, page))
             {
-                // Se não estiver, verificar se a memória está cheia.
+                // If the page is not in memory, we need to check if the memory is full 
                 if (isQueueFull(queue))
                 {
-                    // Se estiver, desenfileirar a página mais antiga.
-                    dequeue(queue);
+                    // If it is, we need to replace the oldest page in memory
+                    node_t * pageToBeReplaced = popFront(queue);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page);
+                    pushBack(queue, page);
                     // Essa página se torna suja?
                 }
-                
-                // Chamar método para enfileirar a página.
-                enqueue(queue, page);
-            }  
+                else
+                {
+                    insertPage(pgTable, page);
+                    pushBack(queue, page);
+                }
+            }
+            // If the page is already in memory, we do nothing  
         }
         destroyQueue(queue);
         fclose(file);
     }
     else if (algorithm == 'lru')
     {
-        unsigned addr, page;
-        char mode;
-
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
@@ -117,7 +115,9 @@ int main(int argc, char *argv[])
                 // Se não estiver, verificar se a memória está cheia.
                 if (isDLStackFull(stack))
                     // Se estiver, remove a página no fundo da pilha.
-                    popBottom(stack);   // Essa página se torna suja?
+                    popBottom(stack);
+                    
+                    // Essa página se torna suja?
 
                 // Chamar método para adicionar a página.
                 push(stack, page);
@@ -133,9 +133,6 @@ int main(int argc, char *argv[])
     }
     else if (algorithm == 'random')
     {
-        unsigned addr, page;
-        char mode;
-
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;

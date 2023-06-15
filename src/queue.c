@@ -10,9 +10,25 @@ node_t* create_node(){
     return n;
 }
 
-queue_t* create_queue(){
+queue_t* createQueue(int capacity){
     queue_t* q = (queue_t*)malloc(sizeof(queue_t));
+    q->capacity = capacity;
+    q->size = 0;
     return q;
+}
+
+int isQueueFull(queue_t* q){
+    return q->size == q->capacity;
+}
+
+int isInQueue(queue_t* q, long long val){
+    node_t* n = q->head;
+    while(n != NULL){
+        if(n->value == val)
+            return 1;
+        n = n->nxt;
+    }
+    return 0;
 }
 
 void pop_back(queue_t* q){
@@ -30,36 +46,46 @@ void pop_back(queue_t* q){
     }
 }
 
-void pop_front(queue_t* q){
-    if(q->head == NULL)
-        return;
-    if(q->head == q->tail){
-        free(q->head);
+node_t* popFront(queue_t* q) 
+{
+    if (q->head == NULL)
+        return NULL;
+
+    node_t* removed_node = q->head;
+
+    if (q->head == q->tail) 
+    {
         q->tail = NULL;
         q->head = NULL;
-    } else{
+    } 
+    else 
+    {
         node_t* new_head = q->head->nxt;
-        free(q->head);
         new_head->prev = NULL;
         q->head = new_head;
     }
+    q->size--;
+    return removed_node;
 }
  
-void push_back(queue_t* q, long long val){
-    //dbg(val);
+void pushBack(queue_t* q, long long val)
+{
     node_t* new_tail = create_node();
     new_tail->value = val;
     new_tail->prev = q->tail;
     new_tail->nxt = NULL;
 
-    if(q->head == NULL){
+    if(q->head == NULL)
+    {
         q->head = new_tail;
         q->tail = new_tail;
+        q->size++;
         return;
     }
 
     q->tail->nxt = new_tail;
     q->tail = new_tail;
+    q-> size++;
 }
 
 void push_front(queue_t* q, long long val){

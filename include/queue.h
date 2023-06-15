@@ -18,18 +18,24 @@ struct queue
 {
     node_t* head;
     node_t* tail;
+    int size;
+    int capacity;
 };
 
 
 node_t* create_node();
 
-queue_t* create_queue();
+queue_t* createQueue(int capacity);
+
+int isQueueFull(queue_t* q);
+
+int isInQueue(queue_t* q, long long val);
 
 void pop_back(queue_t* q);
 
-void pop_front(queue_t* q);
+node_t* popFront(queue_t* q);
  
-void push_back(queue_t* q, long long val);
+void pushBack(queue_t* q, long long val);
 
 void push_front(queue_t* q, long long val);
 
