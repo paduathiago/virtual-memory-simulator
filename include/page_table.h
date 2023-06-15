@@ -19,4 +19,6 @@ typedef struct {
     int referenceBit;
 } PageTableEntry;
 
+PageTableEntry* createPageTableEntry(int pageNumber);
+
 #endif

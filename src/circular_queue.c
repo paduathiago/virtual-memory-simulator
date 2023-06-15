@@ -2,7 +2,7 @@
 
 CircularQueue* createCircularQueue(int capacity) {
     CircularQueue* queue = (CircularQueue*)malloc(sizeof(CircularQueue));
-    queue->buffer = (int*)malloc(capacity * sizeof(int));
+    queue->buffer = (PageTableEntry*)malloc(capacity * sizeof(PageTableEntry));
     queue->capacity = capacity;
     queue->front = -1;
     queue->rear = -1;
@@ -19,21 +19,40 @@ int isEmpty(CircularQueue* queue) {
 }
 
 void enqueue(CircularQueue* queue, int item) {
+    PageTableEntry * newPage = createPageTableEntry(item);
+    
     if (isEmpty(queue))
         queue->front = 0;
 
     queue->rear = (queue->rear + 1) % queue->capacity;
-    queue->buffer[queue->rear] = item;
+    queue->buffer[queue->rear] = *newPage;
     queue->size++;
 }
 
-int dequeue(CircularQueue* queue) {
+int itemReplacement(CircularQueue* queue, int newItem) 
+{
+    PageTableEntry * newPage = createPageTableEntry(newItem);
+    while (!(queue->buffer[queue->clockPointer].referenceBit == 0))
+    {
+        queue->buffer[queue->clockPointer].referenceBit = 0;
+        queue->clockPointer = (queue->clockPointer + 1) % queue->capacity;
+        if(queue->buffer[queue->clockPointer].referenceBit == 0)
+        {
+            int replaced = queue->buffer[queue->clockPointer].pageNumber;
+            queue->buffer[queue->clockPointer] = *newPage;
+            return replaced;
+        }
+    }
+}
+/*PageTableEntry dequeue(CircularQueue* queue) {
     if (isEmpty(queue)) {
         printf("A fila está vazia. Não é possível desenfileirar elementos.\n");
-        return -1; // Valor inválido
+        PageTableEntry emptyEntry;
+        emptyEntry.pageNumber = -1; // Valor inválido
+        return emptyEntry;
     }
 
-    int item = queue->buffer[queue->front];
+    PageTableEntry item = queue->buffer[queue->front];
     queue->front = (queue->front + 1) % queue->capacity;
     queue->size--;
 
@@ -43,23 +62,27 @@ int dequeue(CircularQueue* queue) {
     return item;
 }
 
-int front(CircularQueue* queue) {
+PageTableEntry front(CircularQueue* queue) {
     if (isEmpty(queue)) {
         printf("A fila está vazia. Não há elementos no início.\n");
-        return -1; // Valor inválido
+        PageTableEntry emptyEntry;
+        emptyEntry.pageNumber = -1; // Valor inválido
+        return emptyEntry;
     }
 
     return queue->buffer[queue->front];
 }
 
-int rear(CircularQueue* queue) {
+PageTableEntry rear(CircularQueue* queue) {
     if (isEmpty(queue)) {
         printf("A fila está vazia. Não há elementos no final.\n");
-        return -1; // Valor inválido
+        PageTableEntry emptyEntry;
+        emptyEntry.pageNumber = -1; // Valor inválido
+        return emptyEntry;
     }
 
     return queue->buffer[queue->rear];
-}
+}*/
 
 void destroyCircularQueue(CircularQueue* queue) {
     free(queue->buffer);

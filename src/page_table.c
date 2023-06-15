@@ -1,5 +1,12 @@
 #include "page_table.h"
 
+PageTableEntry* createPageTableEntry(int pageNumber) {
+    PageTableEntry* entry = malloc(sizeof(PageTableEntry));
+    entry->pageNumber = pageNumber;
+    entry->referenceBit = 0;
+    return entry;
+}
+
 PageTable* createPageTable(int capacity) {
     PageTable* table = malloc(sizeof(PageTable));
     table->entries = malloc(capacity * sizeof(PageTableEntry));

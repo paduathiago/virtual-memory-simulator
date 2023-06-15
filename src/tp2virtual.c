@@ -66,6 +66,8 @@ int main(int argc, char *argv[])
                 else
                 {
                     // otherwise, we need to replace the first page in memory whose reference bit is 0
+                    // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
+                    
                     
                 }
             }
