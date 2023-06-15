@@ -133,7 +133,17 @@ int main(int argc, char *argv[])
     }
     else if (algorithm == 'random')
     {
+        unsigned addr, page;
+        char mode;
 
+        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        {
+            page = addr >> s;
+            if(!isPTFull)
+                insertPage(pgTable, page);
+            else
+                replaceRandom(pgTable, page);
+        }
     }
     else
     {
