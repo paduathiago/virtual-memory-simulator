@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         char mode;
 
         // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
-        struct Queue * queue = createQueue(memorySize/pageSize);  
+        struct Queue * queue = createQueue(pgTable->capacity);  
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
         unsigned addr, page;
         char mode;
 
-        struct DoublyLinkedStack * stack = createDLStack(memorySize/pageSize);  
+        struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
@@ -150,6 +150,13 @@ int main(int argc, char *argv[])
         printf("Error: Invalid algorithm\n");
         return 1;
     }
+
+    printf("Input file: %s\n", fileName);
+    printf("Memory Size: %d\n", memorySize);
+    printf("Page Size: %d\n", pageSize);
+    printf("Replacement Algorithm: %s\n", algorithm);
+    //printf("Page Faults: %d\n", pgTable->pageFaults);
+    //printf("Page Hits: %d\n", pgTable->pageHits);
 
     return 0;
 }
