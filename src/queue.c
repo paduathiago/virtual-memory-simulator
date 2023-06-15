@@ -128,3 +128,13 @@ void print_queue(queue_t* q){
     }
     printf("\n");
 }
+
+void destroyQueue(queue_t* q){
+    node_t* n = q->head;
+    while(n != NULL){
+        node_t* nxt = n->nxt;
+        free(n);
+        n = nxt;
+    }
+    free(q);
+}

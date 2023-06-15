@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     else if (strcmp(algorithm, "fifo"))
     {
         // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
-        struct Queue * queue = createQueue(pgTable->capacity);  
+        queue_t * queue = createQueue(pgTable->capacity);  
         while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
