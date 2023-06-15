@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (algorithm == '2a')
+    if (*algorithm == '2a')
     {
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         }
         fclose(file);
     }
-    else if (algorithm == 'fifo')
+    else if (*algorithm == 'fifo')
     {
         // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
         struct Queue * queue = createQueue(pgTable->capacity);  
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
         destroyQueue(queue);
         fclose(file);
     }
-    else if (algorithm == 'lru')
+    else if (*algorithm == 'lru')
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
         destroyDLStack(stack);
         fclose(file);
     }
-    else if (algorithm == 'random')
+    else if (*algorithm == 'random')
     {
         while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
         {
