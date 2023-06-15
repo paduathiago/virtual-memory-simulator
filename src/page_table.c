@@ -1,13 +1,16 @@
 #include "page_table.h"
 
-PageTableEntry* createPageTableEntry(int pageNumber) {
+PageTableEntry* createPageTableEntry(int pageNumber, char mode) 
+{
     PageTableEntry* entry = malloc(sizeof(PageTableEntry));
     entry->pageNumber = pageNumber;
     entry->referenceBit = 0;
+    entry->dirtyBit = (mode == 'W') ? 1 : 0;
     return entry;
 }
 
-PageTable* createPageTable(int capacity) {
+PageTable* createPageTable(int capacity) 
+{
     PageTable* table = malloc(sizeof(PageTable));
     table->entries = malloc(capacity * sizeof(PageTableEntry));
     table->size = 0;
@@ -19,7 +22,8 @@ int isPTFull(PageTable* table){
     return table->size == table->capacity;
 }
 
-int MemoryPosition(PageTable* table, int pageNumber){
+int MemoryPosition(PageTable* table, int pageNumber)
+{
     for(int i = 0; i < table->size; i++){
         if(table->entries[i].pageNumber == pageNumber)
             return i;
@@ -27,7 +31,7 @@ int MemoryPosition(PageTable* table, int pageNumber){
     return -1;
 }
 
-void insertPage(PageTable* table, int pageNumber) 
+void insertPage(PageTable* table, int pageNumber, char mode) 
 {
     int memPosition = MemoryPosition(table, pageNumber);
 
@@ -36,9 +40,8 @@ void insertPage(PageTable* table, int pageNumber)
         table->entries[memPosition].referenceBit = 1;   
     else
     {
-        PageTableEntry entry;
-        entry.referenceBit = 0;
-        table->entries[table->size] = entry;
+        PageTableEntry * entry = createPageTableEntry(pageNumber, mode);
+        table->entries[table->size] = *entry;
         table->size++;
     }
 }

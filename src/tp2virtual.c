@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
             if(!isPTFull(pgTable))
             {
                 // We are free to insert as long as the page table is not full
-                insertPage(pgTable, page);
-                enqueue(circularQ, page);
+                insertPage(pgTable, page, mode);
+                enqueue(circularQ, page, mode);
             }
             else
             {
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                 {
                     // otherwise, we need to replace the first page in memory whose reference bit is 0
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
-                    int pageToBeReplaced = itemReplacement(circularQ, page);
+                    int pageToBeReplaced = itemReplacement(circularQ, page, mode);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
                 }
             }
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    insertPage(pgTable, page);
+                    insertPage(pgTable, page, mode);
                     pushBack(queue, page);
                 }
             }
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
                 else
                 {
                     push(stack, page);
-                    insertPage(pgTable, page);
+                    insertPage(pgTable, page, mode);
                 }    
             }
             // Page is in memory and on top of the stack
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
         {
             page = addr >> s;
             if(!isPTFull(pgTable))
-                insertPage(pgTable, page);
+                insertPage(pgTable, page, mode);
             else
                 replaceRandom(pgTable, page);
         }

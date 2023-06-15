@@ -18,8 +18,8 @@ int isEmpty(CircularQueue* queue) {
     return queue->size == 0;
 }
 
-void enqueue(CircularQueue* queue, int item) {
-    PageTableEntry * newPage = createPageTableEntry(item);
+void enqueue(CircularQueue* queue, int item, char mode) {
+    PageTableEntry * newPage = createPageTableEntry(item, mode);
     
     if (isEmpty(queue))
         queue->front = 0;
@@ -29,9 +29,9 @@ void enqueue(CircularQueue* queue, int item) {
     queue->size++;
 }
 
-int itemReplacement(CircularQueue* queue, int newItem) // TESTAR
+int itemReplacement(CircularQueue* queue, int newItem, char mode) // TESTAR
 {
-    PageTableEntry * newPage = createPageTableEntry(newItem);
+    PageTableEntry * newPage = createPageTableEntry(newItem, mode);
     while (queue->buffer[queue->clockPointer].referenceBit == 1)
     {
         queue->buffer[queue->clockPointer].referenceBit = 0;

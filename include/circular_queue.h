@@ -18,8 +18,8 @@ typedef struct {
 CircularQueue* createCircularQueue(int capacity);
 int isFull(CircularQueue* queue);
 int isEmpty(CircularQueue* queue);
-void enqueue(CircularQueue* queue, int item);
-int itemReplacement(CircularQueue* queue, int newItem);
+void enqueue(CircularQueue* queue, int item, char mode);
+int itemReplacement(CircularQueue* queue, int newItem, char mode);
 void destroyCircularQueue(CircularQueue* queue);
 
 #endif

@@ -8,9 +8,10 @@
 typedef struct {
     int pageNumber;
     int referenceBit;
+    int dirtyBit;
 } PageTableEntry;
 
-PageTableEntry* createPageTableEntry(int pageNumber);
+PageTableEntry* createPageTableEntry(int pageNumber, char mode);
 
 typedef struct {
     PageTableEntry* entries;
@@ -19,7 +20,7 @@ typedef struct {
 } PageTable;
 
 PageTable* createPageTable(int capacity);
-void insertPage(PageTable* table, int pageNumber);
+void insertPage(PageTable* table, int pageNumber, char mode);
 PageTableEntry* replacePage(PageTable* table, int removedPage, int newPage);
 PageTableEntry* replaceRandom(PageTable* table, int pageNumber);
 int isPTFull(PageTable* table);
