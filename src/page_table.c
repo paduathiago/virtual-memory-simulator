@@ -41,3 +41,21 @@ void insertPage(PageTable* table, int pageNumber) {
         table->size++;
     }
 }
+
+int replacePage(PageTable* table, int pageNumber) {
+    int memPosition = MemoryPosition(table, pageNumber);
+    int replaced = -1;
+
+    for(int i = 0; i < table->size; i++)
+    {
+        if(table->entries[i].pageNumber == pageNumber)
+        {
+            replaced = table->entries[i].pageNumber;
+            table->entries[i].pageNumber = pageNumber;
+            table->entries[i].referenceBit = 0;
+            return replaced;
+        }
+    }
+    
+    return replaced;
+}
