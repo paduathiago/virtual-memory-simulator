@@ -116,13 +116,18 @@ int main(int argc, char *argv[])
             {
                 // Se não estiver, verificar se a memória está cheia.
                 if (isDLStackFull(stack))
+                {
                     // Se estiver, remove a página no fundo da pilha.
-                    popBottom(stack);
-                    
+                    int pageToBeReplaced = popBottom(stack);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
                     // Essa página se torna suja?
-
-                // Chamar método para adicionar a página.
-                push(stack, page);
+                    push(stack, page);
+                }
+                else
+                {
+                    push(stack, page);
+                    insertPage(pgTable, page);
+                }    
             }
             else if(pageToBeRenewed == -1)
                 continue;  // Se estiver na memoria e no topo da pilha não faz nada
