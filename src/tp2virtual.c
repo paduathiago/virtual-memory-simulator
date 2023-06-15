@@ -67,15 +67,11 @@ int main(int argc, char *argv[])
                 {
                     // otherwise, we need to replace the first page in memory whose reference bit is 0
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
-                    
-                    
+                    int pageToBeReplaced = itemReplacement(circularQ, pgTable);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced);
                 }
             }
-
-            // Verificar se a página já está na memória e incrementar o bit de referência
-            
         }
-        
     }
     else if (algorithm == 'fifo')
     {

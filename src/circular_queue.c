@@ -44,45 +44,6 @@ int itemReplacement(CircularQueue* queue, int newItem)
         }
     }
 }
-/*PageTableEntry dequeue(CircularQueue* queue) {
-    if (isEmpty(queue)) {
-        printf("A fila está vazia. Não é possível desenfileirar elementos.\n");
-        PageTableEntry emptyEntry;
-        emptyEntry.pageNumber = -1; // Valor inválido
-        return emptyEntry;
-    }
-
-    PageTableEntry item = queue->buffer[queue->front];
-    queue->front = (queue->front + 1) % queue->capacity;
-    queue->size--;
-
-    if (isEmpty(queue))
-        queue->front = queue->rear = -1;
-
-    return item;
-}
-
-PageTableEntry front(CircularQueue* queue) {
-    if (isEmpty(queue)) {
-        printf("A fila está vazia. Não há elementos no início.\n");
-        PageTableEntry emptyEntry;
-        emptyEntry.pageNumber = -1; // Valor inválido
-        return emptyEntry;
-    }
-
-    return queue->buffer[queue->front];
-}
-
-PageTableEntry rear(CircularQueue* queue) {
-    if (isEmpty(queue)) {
-        printf("A fila está vazia. Não há elementos no final.\n");
-        PageTableEntry emptyEntry;
-        emptyEntry.pageNumber = -1; // Valor inválido
-        return emptyEntry;
-    }
-
-    return queue->buffer[queue->rear];
-}*/
 
 void destroyCircularQueue(CircularQueue* queue) {
     free(queue->buffer);

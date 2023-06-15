@@ -11,7 +11,7 @@ typedef struct {
 
 PageTable* createPageTable(int capacity);
 void insertPage(PageTable* table, int pageNumber);
-int replacePage(PageTable* table, int pageNumber);
+PageTableEntry* replacePage(PageTable* table, int pageNumber);
 int isPTFull(PageTable* table);
 int MemoryPosition(PageTable* table, int pageNumber);
 

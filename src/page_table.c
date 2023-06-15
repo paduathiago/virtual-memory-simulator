@@ -27,7 +27,8 @@ int MemoryPosition(PageTable* table, int pageNumber){
     return -1;
 }
 
-void insertPage(PageTable* table, int pageNumber) {
+void insertPage(PageTable* table, int pageNumber) 
+{
     int memPosition = MemoryPosition(table, pageNumber);
 
     // if page is already in memory, increment reference bit
@@ -42,7 +43,8 @@ void insertPage(PageTable* table, int pageNumber) {
     }
 }
 
-int replacePage(PageTable* table, int pageNumber) {
+PageTableEntry * replacePage(PageTable* table, int pageNumber) 
+{
     int memPosition = MemoryPosition(table, pageNumber);
     int replaced = -1;
 
@@ -50,12 +52,10 @@ int replacePage(PageTable* table, int pageNumber) {
     {
         if(table->entries[i].pageNumber == pageNumber)
         {
-            replaced = table->entries[i].pageNumber;
+            replaced = table->entries[i];
             table->entries[i].pageNumber = pageNumber;
             table->entries[i].referenceBit = 0;
             return replaced;
         }
     }
-    
-    return replaced;
 }

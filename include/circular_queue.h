@@ -16,12 +16,10 @@ typedef struct {
 } CircularQueue;
 
 CircularQueue* createCircularQueue(int capacity);
-void destroyCircularQueue(CircularQueue* queue);
 int isFull(CircularQueue* queue);
 int isEmpty(CircularQueue* queue);
 void enqueue(CircularQueue* queue, int item);
-PageTableEntry dequeue(CircularQueue* queue);
-PageTableEntry front(CircularQueue* queue);
-PageTableEntry rear(CircularQueue* queue);
+int itemReplacement(CircularQueue* queue, int newItem);
+void destroyCircularQueue(CircularQueue* queue);
 
 #endif
