@@ -110,14 +110,15 @@ int main(int argc, char *argv[])
         while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            // Verificar se a página já está na memória
             int pageToBeRenewed = popFromData(stack, page);
+            
+            // Page is not in memory
             if(pageToBeRenewed == -2)
             {
-                // Se não estiver, verificar se a memória está cheia.
+                // Check if table page is full
                 if (isDLStackFull(stack))
                 {
-                    // Se estiver, remove a página no fundo da pilha.
+                    // If it is, we pop the bottom of the stack and replace it with the new page
                     int pageToBeReplaced = popBottom(stack);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
                     // Essa página se torna suja?
@@ -129,10 +130,12 @@ int main(int argc, char *argv[])
                     insertPage(pgTable, page);
                 }    
             }
+            // Page is in memory and on top of the stack
             else if(pageToBeRenewed == -1)
-                continue;  // Se estiver na memoria e no topo da pilha não faz nada
+                continue;
+            // Page is in memory but not on top of the stack
             else
-                // Se não estiver(no topo), empilhar no topo, ja que a pagina foi removida previamente.
+                // Since page has been previously removed, Push page(put on top)
                 push(stack, pageToBeRenewed);             
         }
         destroyDLStack(stack);
