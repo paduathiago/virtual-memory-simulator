@@ -29,10 +29,10 @@ void enqueue(CircularQueue* queue, int item) {
     queue->size++;
 }
 
-int itemReplacement(CircularQueue* queue, int newItem) 
+int itemReplacement(CircularQueue* queue, int newItem) // TESTAR
 {
     PageTableEntry * newPage = createPageTableEntry(newItem);
-    while (!(queue->buffer[queue->clockPointer].referenceBit == 0))
+    while (queue->buffer[queue->clockPointer].referenceBit == 1)
     {
         queue->buffer[queue->clockPointer].referenceBit = 0;
         queue->clockPointer = (queue->clockPointer + 1) % queue->capacity;
@@ -43,6 +43,7 @@ int itemReplacement(CircularQueue* queue, int newItem)
             return replaced;
         }
     }
+    return -1;
 }
 
 void destroyCircularQueue(CircularQueue* queue) {

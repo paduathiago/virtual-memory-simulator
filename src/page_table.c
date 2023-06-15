@@ -55,8 +55,11 @@ PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage)
         table->entries[memPosition].referenceBit = 0;
         return replaced;
     }
-    else 
+    else
+    {
         printf("Error! Page not found in memory\n");
+        return NULL;
+    }
 }
 
 PageTableEntry * replaceRandom(PageTable* table, int pageNumber) 

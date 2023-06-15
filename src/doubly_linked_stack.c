@@ -46,11 +46,6 @@ void push(struct DoublyLinkedStack* stack, unsigned data)
 
 unsigned popBottom(struct DoublyLinkedStack* stack) 
 {
-    if (isDLStackEmpty(stack)) {
-        printf("A pilha está vazia, impossível remover elemento.\n");
-        return NULL;
-    }
-
     struct Node* bottomNode = stack->bottom;
     unsigned bottomData = bottomNode->data;
 
@@ -99,7 +94,7 @@ int popFromData(struct DoublyLinkedStack* stack, unsigned data)
 
 void destroyDLStack(struct DoublyLinkedStack* stack) {
     while (!isDLStackEmpty(stack)) 
-        pop(stack);
+        popBottom(stack);
 
     free(stack);
 }

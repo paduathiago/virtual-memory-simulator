@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "circular_queue.h"
 #include "doubly_linked_stack.h"
@@ -42,9 +44,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (*algorithm == '2a')
+    if (strcmp(algorithm, "2a"))
     {
-        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             
@@ -73,11 +75,11 @@ int main(int argc, char *argv[])
         }
         fclose(file);
     }
-    else if (*algorithm == 'fifo')
+    else if (strcmp(algorithm, "fifo"))
     {
         // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
         struct Queue * queue = createQueue(pgTable->capacity);  
-        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             if(!isInQueue(queue, page))
@@ -102,10 +104,10 @@ int main(int argc, char *argv[])
         destroyQueue(queue);
         fclose(file);
     }
-    else if (*algorithm == 'lru')
+    else if (strcmp(algorithm, "lru"))
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
-        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             // Verificar se a página já está na memória
@@ -131,9 +133,9 @@ int main(int argc, char *argv[])
         destroyDLStack(stack);
         fclose(file);
     }
-    else if (*algorithm == 'random')
+    else if (strcmp(algorithm, "random"))
     {
-        while (fscanf(file, "%8s %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             if(!isPTFull)
