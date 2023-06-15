@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
             page = addr >> s;
             
             CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
-            if(!isPTFull)
+            if(!isPTFull(pgTable))
             {
                 // We are free to insert as long as the page table is not full
                 insertPage(pgTable, page);
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                 {
                     // otherwise, we need to replace the first page in memory whose reference bit is 0
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
-                    int pageToBeReplaced = itemReplacement(circularQ, pgTable);
+                    int pageToBeReplaced = itemReplacement(circularQ, page);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
                 }
             }
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
         while (fscanf(file, "%u %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            if(!isPTFull)
+            if(!isPTFull(pgTable))
                 insertPage(pgTable, page);
             else
                 replaceRandom(pgTable, page);
