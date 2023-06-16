@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
     PageTable* pgTable = createPageTable(memorySize/pageSize);
-   
 
     if (file == NULL) 
     {
@@ -54,34 +53,44 @@ int main(int argc, char *argv[])
         {
             page = addr >> s;
         
-            if(!isPTFull(pgTable))
-            {
-                // We are free to insert as long as the page table is not full
-                insertPage(pgTable, page, mode);
-                enqueue(circularQ, page, mode);
-            }
+            int memPosition = MemoryPosition(pgTable, page);
+            //printf("memPosition: %d\n", memPosition);
+
+            // This means the page is already in memory
+            if(memPosition != -1)
+                pgTable->entries[memPosition].referenceBit = 1;
+
             else
             {
-                // If the page table is full, we need to check if the page is already in memory
-                int memPosition = MemoryPosition(pgTable, page);
-                if (memPosition != -1)
-                    // If it is, we need to increment the reference bit
-                    pgTable->entries[memPosition].referenceBit = 1;
+                pageFaults++;
+                if(!isPTFull(pgTable))
+                {
+                    // We are free to insert as long as the page table is not full and the page is not already in memory
+                    insertPage(pgTable, page, mode);
+                    enqueue(circularQ, page, mode);
+                    //printf("page table size: %d %d\n", pgTable->entries[pgTable->size-1].pageNumber, pgTable->size);
+                }
                 else
                 {
-                    // otherwise, we need to replace the first page in memory whose reference bit is 0
+                    // We need to replace the first page in memory whose reference bit is 0
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
                     int pageToBeReplaced = itemReplacement(circularQ, page, mode);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
+                    //printf("page to be replaced: %d\n", pageToBeReplaced);
+                    PageTableEntry replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
                     
-                    if (replaced->dirtyBit == 1)
+                    if (replaced.dirtyBit == 1)
                         dirtyPages++;
+                    
+                    /*for(int i = 0; i < pgTable->size; i++)
+                    {
+                        printf("page table: %d %d \n", i, pgTable->entries[i].pageNumber);
+                    }*/
                 }
             }
         }
         fclose(file);
     }
-    else if (strcmp(algorithm, "fifo") == 0)
+    /*else if (strcmp(algorithm, "fifo") == 0)
     {
         queue_t * queue = createQueue(pgTable->capacity);
         printf("page table capacity: %d\n", pgTable->capacity);  
@@ -179,7 +188,7 @@ int main(int argc, char *argv[])
         printf("Error: Invalid algorithm\n");
         return 1;
     }
-
+*/
     printf("Input file: %s\n", fileName);
     printf("Memory Size: %d\n", memorySize);
     printf("Page Size: %d\n", pageSize);
