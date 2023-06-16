@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
             page = addr >> s;
         
             int memPosition = MemoryPosition(pgTable, page);
-            printf("memPosition: %d\n", memPosition);
+            //printf("memPosition: %d\n", memPosition);
 
             // This means the page is already in memory
             if(memPosition != -1)
