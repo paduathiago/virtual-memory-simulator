@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
                     // otherwise, we need to replace the first page in memory whose reference bit is 0
                     // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
                     int pageToBeReplaced = itemReplacement(circularQ, page, mode);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
                     
                     if (replaced->dirtyBit == 1)
                         dirtyPages++;
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
                 {
                     // If it is, we need to replace the oldest page in memory
                     node_t * pageToBeReplaced = popFront(queue);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page, mode);
                     pushBack(queue, page);
                     pageFaults++;
                     
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
                 {
                     // If it is, we pop the bottom of the stack and replace it with the new page
                     int pageToBeReplaced = popBottom(stack);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page);
+                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
                     push(stack, page);
 
                     if (replaced->dirtyBit == 1)
@@ -159,15 +159,15 @@ int main(int argc, char *argv[])
             page = addr >> s;
             if(!isPTFull(pgTable))
             {
-                insertPage(pgTable, page, mode);
-                pageFaults++;  
+                pageFaults++;
+                insertPage(pgTable, page, mode); 
             }
             else
             {
                 if(MemoryPosition(pgTable, page) == -1)
                 {
                     pageFaults++;
-                    PageTableEntry * replaced = replaceRandom(pgTable, page);
+                    PageTableEntry * replaced = replaceRandom(pgTable, page, mode);
                     if (replaced->dirtyBit == 1)
                         dirtyPages++;
                 }

@@ -46,16 +46,16 @@ void insertPage(PageTable* table, int pageNumber, char mode)
     }
 }
 
-PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage) 
+PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage, char mode) 
 {
     int memPosition = MemoryPosition(table, removedPage);
     PageTableEntry *replaced;
+    PageTableEntry *newEntry = createPageTableEntry(newPage, mode);
 
     if (memPosition != -1)
     {
         replaced = &table->entries[memPosition];
-        table->entries[memPosition].pageNumber = newPage;
-        table->entries[memPosition].referenceBit = 0;
+        table->entries[memPosition] = *newEntry;
         return replaced;
     }
     else
@@ -65,12 +65,15 @@ PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage)
     }
 }
 
-PageTableEntry * replaceRandom(PageTable* table, int pageNumber) 
+PageTableEntry * replaceRandom(PageTable* table, int pageNumber, char mode) 
 {
+    PageTableEntry *replaced;
+    PageTableEntry *newEntry = createPageTableEntry(pageNumber, mode);
+    
     srand(42);
     int random = rand() % table->size;
-    PageTableEntry *replaced = &table->entries[random];
-    table->entries[random].pageNumber = pageNumber;
+    replaced = &table->entries[random];
+    table->entries[random] = *newEntry;
 
     return replaced;
 }
