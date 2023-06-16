@@ -66,6 +66,7 @@ int popFromData(struct DoublyLinkedStack* stack, unsigned data)
     if (data == stack->top->data)
         return -1;  // Return since no action is needed (node is already on top)
     
+    currentNode = currentNode->prev;
     while (currentNode != NULL) 
     {
         if (currentNode->data == data) {

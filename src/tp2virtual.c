@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (strcmp(algorithm, "2a") == 0)
+    /*if (strcmp(algorithm, "2a") == 0)
     {   
         CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
@@ -81,16 +81,16 @@ int main(int argc, char *argv[])
                     if (replaced.dirtyBit == 1)
                         dirtyPages++;
                     
-                    /*for(int i = 0; i < pgTable->size; i++)
+                    for(int i = 0; i < pgTable->size; i++)
                     {
                         printf("page table: %d %d \n", i, pgTable->entries[i].pageNumber);
-                    }*/
+                    }
                 }
             }
         }
         fclose(file);
     }
-    /*else if (strcmp(algorithm, "fifo") == 0)
+    else if (strcmp(algorithm, "fifo") == 0)
     {
         queue_t * queue = createQueue(pgTable->capacity);
         printf("page table capacity: %d\n", pgTable->capacity);  
@@ -121,47 +121,47 @@ int main(int argc, char *argv[])
         }
         destroyQueue(queue);
         fclose(file);
-    }
+    }*/
     else if (strcmp(algorithm, "lru") == 0)
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            int pageToBeRenewed = popFromData(stack, page);
             
-            // Page is not in memory
-            if(pageToBeRenewed == -2)
+            if(!isDLStackFull(stack))
             {
-                // Check if table page is full
-                if (isDLStackFull(stack))
+                pageFaults++;
+                push(stack, page);
+                insertPage(pgTable, page, mode);
+            }
+
+            else  
+            {
+                int pageToBeRenewed = popFromData(stack, page);
+                
+                if(pageToBeRenewed == -1)  // Page is in memory and on top of the stack
+                    continue;
+                else if(pageToBeRenewed == -2)  // Page is not in memory
                 {
-                    // If it is, we pop the bottom of the stack and replace it with the new page
+                    pageFaults++;
+                    //We pop the bottom of the stack and replace it with the new page
                     int pageToBeReplaced = popBottom(stack);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
+                    PageTableEntry replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
                     push(stack, page);
 
-                    if (replaced->dirtyBit == 1)
+                    if (replaced.dirtyBit == 1)
                         dirtyPages++;
                 }
+                // Page is in memory but not on top of the stack
                 else
-                {
-                    push(stack, page);
-                    insertPage(pgTable, page, mode);
-                }    
-            }
-            // Page is in memory and on top of the stack
-            else if(pageToBeRenewed == -1)
-                continue;
-            // Page is in memory but not on top of the stack
-            else
-                // Since page has been previously removed, Push page(put on top)
-                push(stack, pageToBeRenewed);             
+                    // Since page has been previously removed, Push page(put on top)
+                    push(stack, pageToBeRenewed);
+            }            
         }
         destroyDLStack(stack);
-        fclose(file);
     }
-    else if (strcmp(algorithm, "random") == 0)
+    /*else if (strcmp(algorithm, "random") == 0)
     {
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
@@ -188,6 +188,7 @@ int main(int argc, char *argv[])
         printf("Error: Invalid algorithm\n");
         return 1;
     }
+    fclose(file);
 */
     printf("Input file: %s\n", fileName);
     printf("Memory Size: %d\n", memorySize);
