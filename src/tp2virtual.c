@@ -49,11 +49,11 @@ int main(int argc, char *argv[])
 
     if (strcmp(algorithm, "2a") == 0)
     {   
+        CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            
-            CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
+        
             if(!isPTFull(pgTable))
             {
                 // We are free to insert as long as the page table is not full
@@ -83,12 +83,14 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(algorithm, "fifo") == 0)
     {
-        queue_t * queue = createQueue(pgTable->capacity);  
+        queue_t * queue = createQueue(pgTable->capacity);
+        printf("page table capacity: %d\n", pgTable->capacity);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             if(!isInQueue(queue, page))
             {
+                pageFaults++;
                 // If the page is not in memory, we need to check if the memory is full 
                 if (isQueueFull(queue))
                 {
@@ -96,7 +98,6 @@ int main(int argc, char *argv[])
                     node_t * pageToBeReplaced = popFront(queue);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page, mode);
                     pushBack(queue, page);
-                    pageFaults++;
                     
                     if (replaced->dirtyBit == 1)
                         dirtyPages++;
@@ -105,7 +106,6 @@ int main(int argc, char *argv[])
                 {
                     insertPage(pgTable, page, mode);
                     pushBack(queue, page);
-                    pageFaults++;
                 }
             }
             // If the page is already in memory, we do nothing  
@@ -157,14 +157,14 @@ int main(int argc, char *argv[])
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            if(!isPTFull(pgTable))
+            if(MemoryPosition(pgTable, page) == -1)
             {
-                pageFaults++;
-                insertPage(pgTable, page, mode); 
-            }
-            else
-            {
-                if(MemoryPosition(pgTable, page) == -1)
+                if(!isPTFull(pgTable))
+                {
+                    pageFaults++;
+                    insertPage(pgTable, page, mode); 
+                }
+                else
                 {
                     pageFaults++;
                     PageTableEntry * replaced = replaceRandom(pgTable, page, mode);
