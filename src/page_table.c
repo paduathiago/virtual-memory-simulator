@@ -28,7 +28,7 @@ int MemoryPosition(PageTable* table, int pageNumber)
         if(table->entries[i].pageNumber == pageNumber)
             return i;
     }
-    return -1;
+    return -1;  // page not found
 }
 
 void insertPage(PageTable* table, int pageNumber, char mode) 
@@ -67,6 +67,7 @@ PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage)
 
 PageTableEntry * replaceRandom(PageTable* table, int pageNumber) 
 {
+    srand(42);
     int random = rand() % table->size;
     PageTableEntry *replaced = &table->entries[random];
     table->entries[random].pageNumber = pageNumber;

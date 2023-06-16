@@ -26,8 +26,9 @@ int main(int argc, char *argv[])
     unsigned pageSize = atoi(argv[3]);
     unsigned memorySize = atoi(argv[4]); 
     
-    unsigned addr, page, dirtyPages = 0;
+    unsigned dirtyPages = 0, pageFaults = 0;
     char mode;
+    unsigned addr, page;
 
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
 
     if (strcmp(algorithm, "2a") == 0)
     {   
-        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             
@@ -82,9 +83,8 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(algorithm, "fifo") == 0)
     {
-        // The queue size is equivalent to the memory size divided by the page size. This represents the number of pages in memory
         queue_t * queue = createQueue(pgTable->capacity);  
-        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             if(!isInQueue(queue, page))
@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
                     node_t * pageToBeReplaced = popFront(queue);
                     PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page);
                     pushBack(queue, page);
+                    pageFaults++;
                     
                     if (replaced->dirtyBit == 1)
                         dirtyPages++;
@@ -104,6 +105,7 @@ int main(int argc, char *argv[])
                 {
                     insertPage(pgTable, page, mode);
                     pushBack(queue, page);
+                    pageFaults++;
                 }
             }
             // If the page is already in memory, we do nothing  
@@ -114,7 +116,7 @@ int main(int argc, char *argv[])
     else if (strcmp(algorithm, "lru") == 0)
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
-        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             int pageToBeRenewed = popFromData(stack, page);
@@ -152,18 +154,24 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(algorithm, "random") == 0)
     {
-        while (fscanf(file, "%u %c", &addr, &mode) == 2) 
+        while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
             if(!isPTFull(pgTable))
+            {
                 insertPage(pgTable, page, mode);
+                pageFaults++;  
+            }
             else
             {
-                PageTableEntry * replaced = replaceRandom(pgTable, page);
-                if (replaced->dirtyBit == 1)
-                    dirtyPages++;
-            }
-                
+                if(MemoryPosition(pgTable, page) == -1)
+                {
+                    pageFaults++;
+                    PageTableEntry * replaced = replaceRandom(pgTable, page);
+                    if (replaced->dirtyBit == 1)
+                        dirtyPages++;
+                }
+            }    
         }
     }
     else
@@ -177,7 +185,7 @@ int main(int argc, char *argv[])
     printf("Page Size: %d\n", pageSize);
     printf("Replacement Algorithm: %s\n", algorithm);
     printf("Written pages: %d\n", dirtyPages);
-    //printf("Page Faults: %d\n", pgTable->pageFaults);
+    printf("Page Faults: %d\n", pageFaults);
 
     return 0;
 }
