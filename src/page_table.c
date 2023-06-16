@@ -33,17 +33,9 @@ int MemoryPosition(PageTable* table, int pageNumber)
 
 void insertPage(PageTable* table, int pageNumber, char mode) 
 {
-    int memPosition = MemoryPosition(table, pageNumber);
-
-    // if page is already in memory, increment reference bit
-    if(memPosition != -1)
-        table->entries[memPosition].referenceBit = 1;   
-    else
-    {
-        PageTableEntry * entry = createPageTableEntry(pageNumber, mode);
-        table->entries[table->size] = *entry;
-        table->size++;
-    }
+    PageTableEntry * entry = createPageTableEntry(pageNumber, mode);
+    table->entries[table->size] = *entry;
+    table->size++;
 }
 
 PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage, char mode) 
