@@ -41,6 +41,7 @@ int itemReplacement(CircularQueue* queue, int newItem, char mode) // TESTAR
     {
         int replaced = queue->buffer[queue->clockPointer].pageNumber;
         queue->buffer[queue->clockPointer] = *newPage;
+        queue->clockPointer = (queue->clockPointer + 1) % queue->capacity;
         return replaced;
     }       
     printf("Error! Page not found in memory\n");

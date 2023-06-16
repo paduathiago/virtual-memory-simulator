@@ -15,6 +15,14 @@ PageTable* createPageTable(int capacity)
     table->entries = malloc(capacity * sizeof(PageTableEntry));
     table->size = 0;
     table->capacity = capacity;
+
+    for (int i = 0; i < capacity; i++)
+    {
+        table->entries[i].pageNumber = -1;
+        table->entries[i].referenceBit = 0;
+        table->entries[i].dirtyBit = 0;
+    }
+
     return table;
 }
 
@@ -38,22 +46,22 @@ void insertPage(PageTable* table, int pageNumber, char mode)
     table->size++;
 }
 
-PageTableEntry * replacePage(PageTable* table, int removedPage, int newPage, char mode) 
+PageTableEntry replacePage(PageTable* table, int removedPage, int newPage, char mode) 
 {
     int memPosition = MemoryPosition(table, removedPage);
-    PageTableEntry *replaced;
+    PageTableEntry replaced;
     PageTableEntry *newEntry = createPageTableEntry(newPage, mode);
 
     if (memPosition != -1)
     {
-        replaced = &table->entries[memPosition];
+        replaced = table->entries[memPosition];
         table->entries[memPosition] = *newEntry;
         return replaced;
     }
     else
     {
         printf("Error! Page not found in memory\n");
-        return NULL;
+        return;
     }
 }
 
