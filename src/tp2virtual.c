@@ -19,6 +19,25 @@ int sValue(int pageSize)
     return s;
 }
 
+int findPage(PageTableEntry* pageTable,  int page)
+{
+    for (int i = 0; i < pageTable->size; i++)
+    {
+        if (pageTable->entries[i].pageNumber == page)
+            return i;
+    }
+    return -1;
+}
+
+PageTableEntry replace(PageTableEntry* pgTable, int pageToBeReplaced, int page, char mode)
+{
+    
+    pgTable[pageToBeReplaced].pageNumber = page;
+    pgTable[pageToBeReplaced].referenceBit = 0;
+    pgTable[pageToBeReplaced].dirtyBit = (mode == 'W') ? 1 : 0;
+    return replaced;
+}
+
 int main(int argc, char *argv[])
 {
     char * algorithm = argv[1];
@@ -32,7 +51,8 @@ int main(int argc, char *argv[])
 
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
-    PageTable* pgTable = createPageTable(memorySize/pageSize);
+
+    PageTableEntry * pageTable = malloc(sizeof(PageTableEntry) * (memorySize/pageSize));
 
     if (file == NULL) 
     {
@@ -46,7 +66,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (strcmp(algorithm, "2a") == 0)
+    /*if (strcmp(algorithm, "2a") == 0)
     {   
         CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
@@ -83,11 +103,10 @@ int main(int argc, char *argv[])
                 }
             }
         }
-    }
+    }*/
     else if (strcmp(algorithm, "fifo") == 0)
     {
-        queue_t * queue = createQueue(pgTable->capacity);
-        printf("page table capacity: %d\n", pgTable->capacity);  
+        queue_t * queue = createQueue(memorySize/pageSize);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
@@ -99,7 +118,7 @@ int main(int argc, char *argv[])
                 {
                     // If it is, we need to replace the oldest page in memory
                     node_t * pageToBeReplaced = popFront(queue);
-                    PageTableEntry replaced = replacePage(pgTable, pageToBeReplaced->value, page, mode);
+                    PageTableEntry replaced = replace(pageTable, pageToBeReplaced->value, page, mode);
                     pushBack(queue, page);
                     
                     if (replaced.dirtyBit == 1)
@@ -115,7 +134,7 @@ int main(int argc, char *argv[])
         }
         destroyQueue(queue);
     }
-    else if (strcmp(algorithm, "lru") == 0)
+    /*else if (strcmp(algorithm, "lru") == 0)
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
@@ -192,4 +211,5 @@ int main(int argc, char *argv[])
     printf("Page Faults: %d\n", pageFaults);
 
     return 0;
+*/
 }
