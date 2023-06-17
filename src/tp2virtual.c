@@ -159,18 +159,19 @@ int main(int argc, char *argv[])
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            if(MemoryPosition(pgTable, page) == -1)
+            int memPosition = MemoryPosition(pgTable, page);
+            //printf("memPosition: %d\n", memPosition);
+            if(memPosition == -1)
             {
+                pageFaults++;
                 if(!isPTFull(pgTable))
                 {
-                    pageFaults++;
-                    insertPage(pgTable, page, mode); 
+                    insertPage(pgTable, page, mode);
                 }
                 else
                 {
-                    pageFaults++;
-                    PageTableEntry * replaced = replaceRandom(pgTable, page, mode);
-                    if (replaced->dirtyBit == 1)
+                    PageTableEntry replaced = replaceRandom(pgTable, page, mode);
+                    if (replaced.dirtyBit == 1)
                         dirtyPages++;
                 }
             }    

@@ -65,14 +65,14 @@ PageTableEntry replacePage(PageTable* table, int removedPage, int newPage, char 
     }
 }
 
-PageTableEntry * replaceRandom(PageTable* table, int pageNumber, char mode) 
+PageTableEntry replaceRandom(PageTable* table, int pageNumber, char mode) 
 {
-    PageTableEntry *replaced;
+    PageTableEntry replaced;
     PageTableEntry *newEntry = createPageTableEntry(pageNumber, mode);
     
-    srand(42);
     int random = rand() % table->size;
-    replaced = &table->entries[random];
+    printf("Random number: %d\n", random);
+    replaced = table->entries[random];
     table->entries[random] = *newEntry;
 
     return replaced;
