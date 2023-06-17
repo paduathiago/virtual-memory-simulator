@@ -43,7 +43,6 @@ int itemReplacement(CircularQueue* queue, int newItem, char mode) // TESTAR
         int replaced = queue->buffer[queue->clockPointer].pageNumber;
         
         queue->buffer[queue->clockPointer] = *newPage;
-        printf("clockPointer: %d\n", queue->clockPointer);
         queue->clockPointer = (queue->clockPointer + 1) % queue->capacity;
         
         return replaced;

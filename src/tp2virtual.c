@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    /*if (strcmp(algorithm, "2a") == 0)
+    if (strcmp(algorithm, "2a") == 0)
     {   
         CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
@@ -80,15 +80,9 @@ int main(int argc, char *argv[])
                     
                     if (replaced.dirtyBit == 1)
                         dirtyPages++;
-                    
-                    for(int i = 0; i < pgTable->size; i++)
-                    {
-                        printf("page table: %d %d \n", i, pgTable->entries[i].pageNumber);
-                    }
                 }
             }
         }
-        fclose(file);
     }
     else if (strcmp(algorithm, "fifo") == 0)
     {
@@ -105,10 +99,10 @@ int main(int argc, char *argv[])
                 {
                     // If it is, we need to replace the oldest page in memory
                     node_t * pageToBeReplaced = popFront(queue);
-                    PageTableEntry * replaced = replacePage(pgTable, pageToBeReplaced->value, page, mode);
+                    PageTableEntry replaced = replacePage(pgTable, pageToBeReplaced->value, page, mode);
                     pushBack(queue, page);
                     
-                    if (replaced->dirtyBit == 1)
+                    if (replaced.dirtyBit == 1)
                         dirtyPages++;
                 }
                 else
@@ -120,8 +114,7 @@ int main(int argc, char *argv[])
             // If the page is already in memory, we do nothing  
         }
         destroyQueue(queue);
-        fclose(file);
-    }*/
+    }
     else if (strcmp(algorithm, "lru") == 0)
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
@@ -161,7 +154,7 @@ int main(int argc, char *argv[])
         }
         destroyDLStack(stack);
     }
-    /*else if (strcmp(algorithm, "random") == 0)
+    else if (strcmp(algorithm, "random") == 0)
     {
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
@@ -189,7 +182,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     fclose(file);
-*/
+
     printf("Input file: %s\n", fileName);
     printf("Memory Size: %d\n", memorySize);
     printf("Page Size: %d\n", pageSize);
