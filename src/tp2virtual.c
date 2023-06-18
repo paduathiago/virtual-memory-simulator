@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "circular_queue.h"
 #include "doubly_linked_stack.h"
 #include "page_table.h"
 #include "queue.h"

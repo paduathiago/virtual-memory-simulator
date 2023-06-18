@@ -120,15 +120,6 @@ void erase(queue_t* q, long long val){
     free(n);
 }
 
-void print_queue(queue_t* q){
-    node_t* n = q->head;
-    while(n != NULL){
-        printf("%lld ", n->value);
-        n = n->nxt;
-    }
-    printf("\n");
-}
-
 void destroyQueue(queue_t* q){
     node_t* n = q->head;
     while(n != NULL){

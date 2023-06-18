@@ -43,8 +43,6 @@ node_t* find_node(queue_t* q, long long val);
 
 void erase(queue_t* q, long long val);
 
-void print_queue(queue_t* q);
-
 void destroyQueue(queue_t* q);
 
 #endif /* QUEUE_H */
