@@ -54,7 +54,6 @@ int main(int argc, char *argv[])
             page = addr >> s;
         
             int memPosition = MemoryPosition(pgTable, page);
-            //printf("memPosition: %d\n", memPosition);
 
             // This means the page is already in memory
             if(memPosition != -1)
@@ -73,7 +72,6 @@ int main(int argc, char *argv[])
                     // We are free to insert as long as the page table is not full and the page is not already in memory
                     insertPage(pgTable, page, mode);
                     enqueue(circularQ, page, mode);
-                    //printf("page table size: %d %d\n", pgTable->entries[pgTable->size-1].pageNumber, pgTable->size);
                 }
                 else
                 {
@@ -92,7 +90,6 @@ int main(int argc, char *argv[])
     else if (strcmp(algorithm, "fifo") == 0)
     {
         queue_t * queue = createQueue(pgTable->capacity);
-        //printf("page table capacity: %d\n", pgTable->capacity);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
@@ -116,11 +113,11 @@ int main(int argc, char *argv[])
                     pushBack(queue, page);
                 }
             }
-            /*else
+            else
             {
                 if(mode == 'W')
-                    pgTable->entries[memPosition].dirtyBit = 1;
-            }*/
+                    pgTable->entries[MemoryPosition(pgTable, page)].dirtyBit = 1;
+            }
         }
         destroyQueue(queue);
     }
@@ -169,7 +166,6 @@ int main(int argc, char *argv[])
         {
             page = addr >> s;
             int memPosition = MemoryPosition(pgTable, page);
-            //printf("memPosition: %d\n", memPosition);
             if(memPosition == -1)
             {
                 pageFaults++;
