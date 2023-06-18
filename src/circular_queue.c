@@ -1,4 +1,4 @@
-#include "circular_queue.h"
+/*#include "circular_queue.h"
 
 CircularQueue* createCircularQueue(int capacity) {
     CircularQueue* queue = (CircularQueue*)malloc(sizeof(CircularQueue));
@@ -54,4 +54,4 @@ int itemReplacement(CircularQueue* queue, int newItem, char mode) // TESTAR
 void destroyCircularQueue(CircularQueue* queue) {
     free(queue->buffer);
     free(queue);
-}
+}*/

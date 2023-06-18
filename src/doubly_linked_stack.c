@@ -1,4 +1,4 @@
-#include "doubly_linked_stack.h"
+/*#include "doubly_linked_stack.h"
 
 struct DoublyLinkedStack* createDLStack(int maxSize) {
     struct DoublyLinkedStack* stack = (struct DoublyLinkedStack*)malloc(sizeof(struct DoublyLinkedStack));
@@ -98,4 +98,4 @@ void destroyDLStack(struct DoublyLinkedStack* stack) {
         popBottom(stack);
 
     free(stack);
-}
+}*/

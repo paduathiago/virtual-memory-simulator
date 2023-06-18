@@ -1,4 +1,4 @@
-#include "queue.h"
+/*#include "queue.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -137,4 +137,4 @@ void destroyQueue(queue_t* q){
         n = nxt;
     }
     free(q);
-}
+}*/

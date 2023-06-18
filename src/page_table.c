@@ -9,7 +9,7 @@ PageTableEntry* createPageTableEntry(int pageNumber, char mode)
     return entry;
 }
 
-PageTable* createPageTable(int capacity) 
+/*PageTable* createPageTable(int capacity) 
 {
     PageTable* table = malloc(sizeof(PageTable));
     table->entries = malloc(capacity * sizeof(PageTableEntry));
@@ -76,4 +76,4 @@ PageTableEntry replaceRandom(PageTable* table, int pageNumber, char mode)
     table->entries[random] = *newEntry;
 
     return replaced;
-}
+}*/

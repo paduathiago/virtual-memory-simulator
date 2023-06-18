@@ -9,7 +9,7 @@
 
 int sValue(int pageSize)
 {
-    int tmp = pageSize;
+    int tmp = pageSize * 1024;
     int s = 0;
     while (tmp > 1) 
     {
@@ -19,24 +19,24 @@ int sValue(int pageSize)
     return s;
 }
 
-int findPage(PageTableEntry* pageTable,  int page)
+int findPage(PageTableEntry* pageTable,  int page, int size)
 {
-    for (int i = 0; i < pageTable->size; i++)
+    for (int i = 0; i < size; i++)
     {
-        if (pageTable->entries[i].pageNumber == page)
+        if (pageTable[i].pageNumber == page)
             return i;
     }
     return -1;
 }
 
-PageTableEntry replace(PageTableEntry* pgTable, int pageToBeReplaced, int page, char mode)
+/*PageTableEntry replace(PageTableEntry* pgTable, int pageToBeReplaced, int page, char mode)
 {
     
     pgTable[pageToBeReplaced].pageNumber = page;
     pgTable[pageToBeReplaced].referenceBit = 0;
     pgTable[pageToBeReplaced].dirtyBit = (mode == 'W') ? 1 : 0;
     return replaced;
-}
+}*/
 
 int main(int argc, char *argv[])
 {
@@ -52,7 +52,15 @@ int main(int argc, char *argv[])
     unsigned s = sValue(pageSize);
     FILE *file = fopen(fileName, "r");
 
-    PageTableEntry * pageTable = malloc(sizeof(PageTableEntry) * (memorySize/pageSize));
+    int tableSize = memorySize/pageSize;
+    PageTableEntry * pageTable = malloc(sizeof(PageTableEntry) * (tableSize));
+
+    for (int i = 0; i < tableSize; i++)
+    {
+        pageTable[i].pageNumber = -1;
+        pageTable[i].referenceBit = 0;
+        pageTable[i].dirtyBit = 0;
+    }
 
     if (file == NULL) 
     {
@@ -103,7 +111,7 @@ int main(int argc, char *argv[])
                 }
             }
         }
-    }*/
+    }
     else if (strcmp(algorithm, "fifo") == 0)
     {
         queue_t * queue = createQueue(memorySize/pageSize);  
@@ -134,7 +142,7 @@ int main(int argc, char *argv[])
         }
         destroyQueue(queue);
     }
-    /*else if (strcmp(algorithm, "lru") == 0)
+    else if (strcmp(algorithm, "lru") == 0)
     {
         struct DoublyLinkedStack * stack = createDLStack(pgTable->capacity);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
@@ -172,28 +180,45 @@ int main(int argc, char *argv[])
             }            
         }
         destroyDLStack(stack);
-    }
-    else if (strcmp(algorithm, "random") == 0)
+    }*/
+    if (strcmp(algorithm, "random") == 0)
     {
+        int i = 0;
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
-            int memPosition = MemoryPosition(pgTable, page);
-            //printf("memPosition: %d\n", memPosition);
-            if(memPosition == -1)
+
+             int k = 0, found = 0;
+             
+             while(k < tableSize){
+                if (pageTable[k].pageNumber == -1){
+                    break;
+                }
+                if(pageTable[k].pageNumber == page){
+                    found = 1;
+                    break;
+                }
+                k++;
+            }
+            
+            if(!found)
             {
                 pageFaults++;
-                if(!isPTFull(pgTable))
+                PageTableEntry* newPage = createPageTableEntry(page, mode);
+                if(i < tableSize)
                 {
-                    insertPage(pgTable, page, mode);
+                    pageTable[i] = *newPage;
+                    i++;
                 }
                 else
                 {
-                    PageTableEntry replaced = replaceRandom(pgTable, page, mode);
-                    if (replaced.dirtyBit == 1)
+                    int index = rand() % (tableSize);
+                    if(pageTable[index].dirtyBit == 1)
                         dirtyPages++;
+
+                    pageTable[index] = *newPage;
                 }
-            }    
+            }
         }
     }
     else
@@ -211,5 +236,4 @@ int main(int argc, char *argv[])
     printf("Page Faults: %d\n", pageFaults);
 
     return 0;
-*/
 }
