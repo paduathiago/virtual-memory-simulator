@@ -20,7 +20,7 @@ struct DoublyLinkedStack {
 struct DoublyLinkedStack* createDLStack(int maxSize);
 int isDLStackEmpty(struct DoublyLinkedStack* stack);
 int isDLStackFull(struct DoublyLinkedStack* stack);
-int isinDLStack(struct DoublyLinkedStack* stack, unsigned data);
+int isInDLStack(struct DoublyLinkedStack* stack, unsigned data);
 void push(struct DoublyLinkedStack* stack, unsigned data);
 unsigned popBottom(struct DoublyLinkedStack* stack);
 int popFromData(struct DoublyLinkedStack* stack, unsigned data);

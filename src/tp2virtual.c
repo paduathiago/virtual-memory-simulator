@@ -58,7 +58,12 @@ int main(int argc, char *argv[])
 
             // This means the page is already in memory
             if(memPosition != -1)
+            {
                 pgTable->entries[memPosition].referenceBit = 1;
+                if(mode == 'W')
+                    pgTable->entries[memPosition].dirtyBit = 1;
+            }
+ 
 
             else
             {
@@ -111,7 +116,11 @@ int main(int argc, char *argv[])
                     pushBack(queue, page);
                 }
             }
-            // If the page is already in memory, we do nothing  
+            /*else
+            {
+                if(mode == 'W')
+                    pgTable->entries[memPosition].dirtyBit = 1;
+            }*/
         }
         destroyQueue(queue);
     }
@@ -174,6 +183,11 @@ int main(int argc, char *argv[])
                     if (replaced.dirtyBit == 1)
                         dirtyPages++;
                 }
+            }
+            else
+            {
+                if(mode == 'W')
+                    pgTable->entries[memPosition].dirtyBit = 1;
             }    
         }
     }

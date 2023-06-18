@@ -17,7 +17,7 @@ int isDLStackFull(struct DoublyLinkedStack* stack) {
     return stack->size == stack->maxSize;
 }
 
-int isinDLStack(struct DoublyLinkedStack* stack, unsigned data) 
+int isInDLStack(struct DoublyLinkedStack* stack, unsigned data) 
 {
     struct Node* currentNode = stack->top;
     while (currentNode != NULL) {
