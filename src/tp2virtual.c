@@ -63,7 +63,6 @@ int main(int argc, char *argv[])
                     pgTable->entries[memPosition].dirtyBit = 1;
             }
  
-
             else
             {
                 pageFaults++;
@@ -130,9 +129,17 @@ int main(int argc, char *argv[])
             
             if(!isDLStackFull(stack))
             {
-                pageFaults++;
-                push(stack, page);
-                insertPage(pgTable, page, mode);
+                if(isInDLStack(stack, page))
+                {
+                    if(mode == 'W')
+                        pgTable->entries[MemoryPosition(pgTable, page)].dirtyBit = 1;
+                }
+                else
+                {
+                    pageFaults++;
+                    push(stack, page);
+                    insertPage(pgTable, page, mode);
+                }
             }
 
             else  
@@ -140,7 +147,10 @@ int main(int argc, char *argv[])
                 int pageToBeRenewed = popFromData(stack, page);
                 
                 if(pageToBeRenewed == -1)  // Page is in memory and on top of the stack
-                    continue;
+                {
+                    if(mode == 'W')
+                        pgTable->entries[MemoryPosition(pgTable, page)].dirtyBit = 1;
+                }
                 else if(pageToBeRenewed == -2)  // Page is not in memory
                 {
                     pageFaults++;
@@ -154,9 +164,14 @@ int main(int argc, char *argv[])
                 }
                 // Page is in memory but not on top of the stack
                 else
+                {
+                    if(mode == 'W')
+                        pgTable->entries[MemoryPosition(pgTable, page)].dirtyBit = 1;
                     // Since page has been previously removed, Push page(put on top)
                     push(stack, pageToBeRenewed);
-            }            
+                }            
+            }
+                    
         }
         destroyDLStack(stack);
     }
