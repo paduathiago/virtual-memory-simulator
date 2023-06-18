@@ -71,7 +71,7 @@ PageTableEntry replaceRandom(PageTable* table, int pageNumber, char mode)
     PageTableEntry *newEntry = createPageTableEntry(pageNumber, mode);
     
     int random = rand() % table->size;
-    printf("Random number: %d\n", random);
+    //printf("Random number: %d\n", random);
     replaced = table->entries[random];
     table->entries[random] = *newEntry;
 

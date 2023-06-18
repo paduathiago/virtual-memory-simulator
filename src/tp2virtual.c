@@ -9,7 +9,7 @@
 
 int sValue(int pageSize)
 {
-    int tmp = pageSize;
+    int tmp = pageSize * 1024;
     int s = 0;
     while (tmp > 1) 
     {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     else if (strcmp(algorithm, "fifo") == 0)
     {
         queue_t * queue = createQueue(pgTable->capacity);
-        printf("page table capacity: %d\n", pgTable->capacity);  
+        //printf("page table capacity: %d\n", pgTable->capacity);  
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
