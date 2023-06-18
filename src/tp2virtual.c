@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     if (strcmp(algorithm, "2a") == 0)
     {   
-        CircularQueue * circularQ = createCircularQueue(pgTable->capacity);
+        int clockPointer = 0;
         while (fscanf(file, "%x %c", &addr, &mode) == 2) 
         {
             page = addr >> s;
@@ -66,23 +66,23 @@ int main(int argc, char *argv[])
             else
             {
                 pageFaults++;
-                if(!isPTFull(pgTable))
+                if(isPTFull(pgTable))
                 {
-                    // We are free to insert as long as the page table is not full and the page is not already in memory
-                    insertPage(pgTable, page, mode);
-                    enqueue(circularQ, page, mode);
+                    PageTableEntry * newPage = createPageTableEntry(page, mode);
+                    while (pgTable->entries[clockPointer].referenceBit == 1)
+                    {
+                        pgTable->entries[clockPointer].referenceBit = 0;
+                        clockPointer = (clockPointer + 1) % pgTable->capacity;
+                    }
+                    
+                    if(pgTable->entries[clockPointer].dirtyBit == 1)
+                        dirtyPages++;
+                    
+                    pgTable->entries[clockPointer] = *newPage;
+                    clockPointer = (clockPointer + 1) % pgTable->capacity;
                 }
                 else
-                {
-                    // We need to replace the first page in memory whose reference bit is 0
-                    // the key factor here is using the clock pointer in a way that we can find the right victim and keep a short error rate
-                    int pageToBeReplaced = itemReplacement(circularQ, page, mode);
-                    //printf("page to be replaced: %d\n", pageToBeReplaced);
-                    PageTableEntry replaced = replacePage(pgTable, pageToBeReplaced, page, mode);
-                    
-                    if (replaced.dirtyBit == 1)
-                        dirtyPages++;
-                }
+                    insertPage(pgTable, page, mode);
             }
         }
     }
@@ -170,8 +170,7 @@ int main(int argc, char *argv[])
                     // Since page has been previously removed, Push page(put on top)
                     push(stack, pageToBeRenewed);
                 }            
-            }
-                    
+            }       
         }
         destroyDLStack(stack);
     }
