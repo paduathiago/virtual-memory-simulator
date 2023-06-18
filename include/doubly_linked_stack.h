@@ -18,12 +18,19 @@ struct DoublyLinkedStack {
 };
 
 struct DoublyLinkedStack* createDLStack(int maxSize);
+
 int isDLStackEmpty(struct DoublyLinkedStack* stack);
+
 int isDLStackFull(struct DoublyLinkedStack* stack);
+
 int isInDLStack(struct DoublyLinkedStack* stack, unsigned data);
+
 void push(struct DoublyLinkedStack* stack, unsigned data);
+
 unsigned popBottom(struct DoublyLinkedStack* stack);
+
 int popFromData(struct DoublyLinkedStack* stack, unsigned data);
+
 void destroyDLStack(struct DoublyLinkedStack* stack);
 
 #endif /* DOUBLY_LINKED_STACK_H */
