@@ -36,7 +36,14 @@ int main(int argc, char *argv[])
     if (file == NULL) 
     {
         printf("Invalid File!.\n");
-        return 1;
+        while (file == NULL)
+        {
+            printf("Please enter a valid file or 0 to exit ");
+            scanf("%s", fileName);
+            if(strcmp(fileName, "0") == 0)
+                return 1;
+            file = fopen(fileName, "r");
+        }
     }
 
     if (argc != 5)
@@ -203,7 +210,13 @@ int main(int argc, char *argv[])
     else
     {
         printf("Error: Invalid algorithm\n");
-        return 1;
+        while (strcmp(algorithm, "2a") != 0 || strcmp(algorithm, "fifo") != 0 || strcmp(algorithm, "lru") != 0 || strcmp(algorithm, "random") != 0)
+        {
+            printf("Please enter a valid algorithm or 0 to exit");
+            scanf("%s", algorithm);
+            if(strcmp(algorithm, "0") == 0)
+                return 1;
+        }
     }
     fclose(file);
 
